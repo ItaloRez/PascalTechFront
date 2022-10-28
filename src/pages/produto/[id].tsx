@@ -9,6 +9,7 @@ import { getProduto } from "../../services/produtos";
 import Link from "next/link";
 import { useCarrinhoContext } from "../../contexts/carrinho";
 import { toast } from "react-toastify";
+import { Autocomplete, Button, Select, TextField } from "@mui/material";
 
 const Product = () => {
   const router = useRouter();
@@ -94,6 +95,24 @@ const Product = () => {
           </div>
 
           <div className={styles.assessments}>
+            <h2>Deixe sua avaliação</h2>
+            <div className={styles.comments}>
+              <Autocomplete
+                id="combo-box-demo"
+                options={["1", "2", "3", "4", "5"]}
+                sx={{ width: 300 }}
+                renderInput={(params) => (
+                  <TextField {...params} label="Estrelas" />
+                )}
+              />
+              <TextField
+                id="outlined-multiline-static"
+                label="Deixe sua avaliação"
+                multiline
+                rows={4}
+              />
+              <Button variant="contained">Enviar</Button>
+            </div>
             <h2>Avaliações sobre o produto</h2>
             <div className={styles.comments}>
               {produto?.avaliacoes.map((avaliacao: any) => (
