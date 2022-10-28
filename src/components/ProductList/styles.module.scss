@@ -1,0 +1,18 @@
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.625rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}

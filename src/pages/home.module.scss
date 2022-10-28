@@ -1,0 +1,66 @@
+.container {
+  background-color: var(--gray-50);
+}
+
+.contentContainer {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: calc(100vh - 5rem);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero {
+  max-width: 500px;
+
+  > span {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-top: 2.5rem;
+
+    span {
+      color: var(--green-500);
+    }
+  }
+
+  p {
+    max-width: 415px;
+    font-size: 1.25rem;
+    line-height: 1.625rem;
+    margin-top: 1.5rem;
+
+    span {
+      color: var(--cyan-500);
+      font-weight: bold;
+    }
+  }
+
+  button {
+    margin-top: 2.5rem;
+    width: 297px;
+    height: 60px;
+
+    background: var(--green-500);
+    border-radius: 40px;
+    border: none;
+
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.625rem;
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}

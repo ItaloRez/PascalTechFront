@@ -1,0 +1,166 @@
+.background {
+  background: var(--gray-50);
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  a {
+    color: var(--gray-500);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--green-500);
+    }
+  }
+
+  :last-child {
+    font-weight: 600;
+  }
+}
+
+.product {
+  display: flex;
+  gap: 5rem;
+}
+
+.photosContainer {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 1rem;
+
+  :last-child {
+    grid-column: 2;
+    grid-row-start: 1;
+    grid-row-end: 4;
+    height: 300px;
+    width: 600px;
+  }
+
+  img {
+    background: var(--gray-70);
+    padding: 1rem;
+    border-radius: 8px;
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.infosContainer {
+  display: flex;
+  flex-direction: column;
+
+  .startBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    svg {
+      color: var(--yellow-500);
+    }
+
+    span {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    font-size: 0.875rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .anounce {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 3rem 0 1rem 0;
+  }
+
+  .price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--green-500);
+
+    .discount {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--gray-700);
+      text-decoration: line-through;
+    }
+  }
+
+  button {
+    background: var(--green-500);
+    color: var(--white);
+    border: 0;
+    border-radius: 8px;
+    padding: 1rem;
+    font-weight: 600;
+    transition: filter 0.2s;
+    margin-top: 2rem;
+
+    :hover {
+      filter: brightness(0.9);
+    }
+  }
+}
+
+.assessments {
+  margin-top: 2rem;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
+
+  .comments {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .comment {
+      background: var(--gray-90);
+      border-radius: 8px;
+      padding: 1.625rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .headerBox {
+        display: flex;
+        align-items: center;
+
+        :first-child {
+          font-weight: 700;
+          font-size: 1.125rem;
+          margin-right: 1rem;
+        }
+
+        svg {
+          fill: var(--yellow-500);
+        }
+      }
+    }
+  }
+}
