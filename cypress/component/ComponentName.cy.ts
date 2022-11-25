@@ -4,3 +4,5 @@ describe("ComponentName.cy.ts", () => {
     cy.get("[data-cy=ComponentName]").should("exist");
   });
 });
+
+export {};

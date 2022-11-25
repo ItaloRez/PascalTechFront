@@ -118,3 +118,5 @@ describe("Teste com cypress", () => {
       });
   });
 });
+
+export {};
