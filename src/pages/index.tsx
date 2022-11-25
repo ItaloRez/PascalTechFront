@@ -1,62 +1,66 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useProdutos } from "src/contexts/produtosContext";
+import { useShopInfos } from "src/contexts/shopInfosContext";
 import { Card } from "../components/Card";
 import { ProductList } from "../components/ProductList";
 
 import { getInformacoes } from "../services/informacoes";
 import { getProdutos } from "../services/produtos";
 
+import * as ga from "../lib/ga";
+
 import styles from "./home.module.scss";
+import ReactGA from "react-ga";
 
 export default function Home() {
+  const { produtos } = useProdutos();
+  const { shopInfos } = useShopInfos();
+
   const [informacoes, setInformacoes] = useState({
     slogan: "Site bom de comprar",
     descricao: "Venha comprar aq!",
     callToAction: "Compre agora",
     email: "email@loja.com",
     telefone: "(35) 1901-0909",
-    endereco: {
-      cep: "37564-000",
-      logradouro: "rua josé da silva",
-      numero: "7",
-      complemento: "1",
-      bairro: "centro",
-      cidade: "Borda da Mata",
-      estado: "MG",
-    },
-    redesSociais: {
-      facebook: "email@loja.com",
-      instagram: "@loja",
-      twitter: "@loja",
-      youtube: "loja videos",
-    },
+    endereco: "rua josé da silva",
+    numero: "7",
+    bairro: "centro",
+    cidade: "Borda da Mata",
+    estado: "MG",
   });
 
-  const [produtos, setProdutos] = useState([]);
-
   useEffect(() => {
-    getInformacoesData();
-    getProdutosData();
-  }, []);
-
-  const getInformacoesData = async () => {
-    try {
-      const response = await getInformacoes();
-      if (response) setInformacoes(response[0]);
-    } catch (error) {
-      console.log(error);
+    if (shopInfos) {
+      setInformacoes(shopInfos);
     }
-  };
+  }, [shopInfos]);
 
-  const getProdutosData = async () => {
-    try {
-      const response = await getProdutos();
-      if (response) setProdutos(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //const [produtos, setProdutos] = useState(props.produtos || []);
+
+  // useEffect(() => {
+  //   getInformacoesData();
+  //   getProdutosData();
+  // }, []);
+
+  // const getInformacoesData = async () => {
+  //   try {
+  //     const response = await getInformacoes();
+  //     if (response) setInformacoes(response[0]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const getProdutosData = async () => {
+  //   try {
+  //     const response = await getProdutos();
+  //     if (response) setProdutos(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <>
@@ -75,6 +79,12 @@ export default function Home() {
             </p>
             <button
               onClick={() => {
+                ga.event({
+                  action: "click",
+                  params: {
+                    event_category: "Home",
+                  },
+                });
                 window.location.href = "#destaques";
               }}
             >

@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { useState } from "react";
+import { useAuth } from "src/contexts/authContext";
 
 interface ModalAddUsuarioProps {
   open: boolean;
@@ -16,6 +18,21 @@ export const ModalAddUsuario = ({
   open,
   handleClose,
 }: ModalAddUsuarioProps) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [perfil, setPerfil] = useState("");
+
+  const { handleSignUp } = useAuth();
+
+  const onSignUp = async () => {
+    if (!email || !password || !perfil) {
+      alert("Preencha todos os campos");
+      return;
+    }
+
+    await handleSignUp(email, password, perfil === "Administrador");
+  };
+
   return (
     <>
       <Dialog
@@ -32,23 +49,14 @@ export const ModalAddUsuario = ({
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
               <TextField
                 required
-                id="nome"
-                name="nome"
-                label="Nome"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                required
                 id="email"
                 name="email"
                 label="E-mail"
                 fullWidth
                 autoComplete="given-name"
                 sx={{ mt: 2 }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -60,6 +68,8 @@ export const ModalAddUsuario = ({
                 fullWidth
                 autoComplete="given-name"
                 sx={{ mt: 2 }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -75,112 +85,7 @@ export const ModalAddUsuario = ({
                     fullWidth
                   />
                 )}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <TextField
-                required
-                id="foto"
-                name="foto"
-                label="URL da foto"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
-              <TextField
-                required
-                id="telefone"
-                name="telefone"
-                label="Telefone"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-              <TextField
-                required
-                id="endereco"
-                name="endereco"
-                label="Endereço"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <TextField
-                required
-                id="numero"
-                name="numero"
-                label="Número"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <TextField
-                required
-                id="bairro"
-                name="bairro"
-                label="Bairro"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <TextField
-                required
-                id="cidade"
-                name="cidade"
-                label="Cidade"
-                fullWidth
-                autoComplete="given-name"
-                sx={{ mt: 2 }}
-              />
-            </Grid>
-            <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-              <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={[
-                  "SP",
-                  "MG",
-                  "RJ",
-                  "ES",
-                  "BA",
-                  "SE",
-                  "AL",
-                  "PE",
-                  "PB",
-                  "RN",
-                  "CE",
-                  "PI",
-                  "MA",
-                  "PA",
-                  "AM",
-                  "AC",
-                  "RO",
-                  "RR",
-                  "AP",
-                  "TO",
-                  "GO",
-                  "MT",
-                  "MS",
-                  "DF",
-                ]}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Estado"
-                    sx={{ mt: 2 }}
-                    fullWidth
-                  />
-                )}
+                onChange={(e, value) => setPerfil(value)}
               />
             </Grid>
           </Grid>
@@ -189,7 +94,7 @@ export const ModalAddUsuario = ({
           <Button onClick={handleClose} color="error">
             Cancelar
           </Button>
-          <Button variant="contained" onClick={handleClose} autoFocus>
+          <Button variant="contained" onClick={onSignUp} autoFocus>
             Cadastrar
           </Button>
         </DialogActions>

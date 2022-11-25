@@ -6,10 +6,10 @@ export const CarrinhoProvider = ({ children }) => {
   const [carrinho, setCarrinho] = useState([]);
 
   const adicionarProduto = (produto) => {
-    carrinho.find((item) => item._id === produto._id)
+    carrinho.find((item) => item.id === produto.id)
       ? setCarrinho(
           carrinho.map((item) =>
-            item._id === produto._id
+            item.id === produto.id
               ? { ...item, quantidade: item.quantidade + 1 }
               : item
           )
@@ -20,7 +20,7 @@ export const CarrinhoProvider = ({ children }) => {
   const diminirQuantidade = (produto) => {
     setCarrinho(
       carrinho.map((item) =>
-        item._id === produto._id && item.quantidade > 1
+        item.id === produto.id && item.quantidade > 1
           ? { ...item, quantidade: item.quantidade - 1 }
           : item
       )
@@ -28,8 +28,12 @@ export const CarrinhoProvider = ({ children }) => {
   };
 
   const removerProduto = (produto) => {
-    setCarrinho(carrinho.filter((item) => item._id !== produto._id));
+    setCarrinho(carrinho.filter((item) => item.id !== produto.id));
   };
+
+  const total = carrinho.reduce((acc, item) => {
+    return acc + item.preco * item.quantidade;
+  }, 0);
 
   return (
     <CarrinhoContext.Provider
@@ -38,6 +42,7 @@ export const CarrinhoProvider = ({ children }) => {
         adicionarProduto,
         removerProduto,
         diminirQuantidade,
+        total,
       }}
     >
       {children}

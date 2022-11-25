@@ -1,0 +1,63 @@
+[
+  {
+    "_id": "6348df217c0f01c9980f1b9b",
+    "nome": "Softawre de gestão",
+    "descricao": "Software para você otimizar a sua empresa, tendo todos os processos salvos de maneira segura e acessível em qualquer dispositvo",
+    "preco": 5000,
+    "qtd_estoque": 10,
+    "categoria": "brasil",
+    "imagens": [
+      "https://upload.wikimedia.org/wikipedia/commons/3/3c/IMG_logo_%282017%29.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/3/3c/IMG_logo_%282017%29.svg"
+    ],
+    "data_exclusao": null,
+    "avaliacoes": [],
+    "data_criacao": "2022-10-14T04:01:37.211Z",
+    "data_atualizacao": "2022-10-14T04:01:37.211Z",
+    "__v": 0
+  },
+  {
+    "_id": "6348e3099d171a5545999556",
+    "nome": "Office 364",
+    "descricao": "Programa profissional para edição de arquivos",
+    "preco": 365,
+    "qtd_estoque": 10,
+    "categoria": "brasil",
+    "imagens": [
+      "https://www.awconsultores.com.br/wp-content/uploads/CRM-scaled.jpg"
+    ],
+    "data_atualizacao": null,
+    "data_exclusao": null,
+    "avaliacoes": [],
+    "data_criacao": "2022-10-14T04:18:17.788Z",
+    "__v": 0
+  },
+  {
+    "_id": "6348e3f5ebafc2c3e40f0235",
+    "nome": "CRM",
+    "descricao": "Content Mandgement System, gerencie seus conteudos de forma simplificada!",
+    "preco": 1000,
+    "qtd_estoque": 10,
+    "categoria": "brasil",
+    "imagens": ["https://cartpanda.com/wp-content/uploads/2021/02/image.png"],
+    "data_atualizacao": null,
+    "data_exclusao": null,
+    "avaliacoes": [],
+    "data_criacao": "2022-10-14T04:22:13.027Z",
+    "__v": 0
+  },
+  {
+    "_id": "6348feb07eac8c51195e9039",
+    "nome": "produto novo",
+    "descricao": "produto novo",
+    "preco": 100,
+    "qtd_estoque": 10,
+    "categoria": "crm",
+    "imagens": ["https://cartpanda.com/wp-content/uploads/2021/02/image.png"],
+    "data_atualizacao": null,
+    "data_exclusao": null,
+    "avaliacoes": [],
+    "data_criacao": "2022-10-14T06:16:16.696Z",
+    "__v": 0
+  }
+]

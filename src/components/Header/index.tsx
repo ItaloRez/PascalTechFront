@@ -23,6 +23,10 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { ModalAddUsuario } from "../ModalAddUsuario";
 import { ModalEditInfos } from "../ModalEditInfos";
+import { ModalMeusProdutos } from "../ModalMeusProdutos";
+import { supabase } from "../../services/supabase";
+import { useAuth } from "src/contexts/authContext";
+import * as ga from "../../lib/ga";
 
 export const Header = () => {
   const { carrinho, removerProduto, adicionarProduto, diminirQuantidade } =
@@ -34,12 +38,12 @@ export const Header = () => {
   const [openModalAddProduto, setOpenModalAddProduto] = useState(false);
   const [openModalAddUsuario, setOpenModalAddUsuario] = useState(false);
   const [openModalEditInfos, setOpenModalEditInfos] = useState(false);
+  const [openModalMeusProdutos, setOpenModalMeusProdutos] = useState(false);
 
-  const [usuario, setUsuario] = useState({
-    nome: "João",
-    email: "joao@email.com",
-    role: "admin",
-  });
+  const { user, setUser, handleLogin, handleSignUp, handleLogout } = useAuth();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const router = useRouter();
 
@@ -63,6 +67,29 @@ export const Header = () => {
   const openLogin = Boolean(anchorElLogin);
   const id = open ? "simple-popover" : undefined;
   const idLogin = openLogin ? "simple-popover" : undefined;
+
+  // const handleLogin = async () => {
+  //   let response = await supabase.auth.signInWithPassword({
+  //     email,
+  //     password,
+  //   });
+
+  //   if (response.error) {
+  //     alert(response.error.message);
+  //   } else {
+  //     setUser(response.data.user);
+  //   }
+  // };
+
+  // const handleLogout = async () => {
+  //   let response = await supabase.auth.signOut();
+
+  //   if (response.error) {
+  //     alert(response.error.message);
+  //   } else {
+  //     setUser(null);
+  //   }
+  // };
 
   return (
     <>
@@ -121,13 +148,37 @@ export const Header = () => {
         {carrinho.map((produto: any) => (
           <div key={produto.id} className={styles.produto}>
             <div>
-              <p>{produto.nome}</p>
+              <a
+                href="#"
+                onClick={() => {
+                  router.push(`/produto/${produto.id}`);
+                }}
+              >
+                <p>{produto.nome}</p>
+              </a>
               <p>Preço {produto.preco}</p>
             </div>
             <div>
               <IconButton
                 aria-label="remove"
-                onClick={() => diminirQuantidade(produto)}
+                onClick={() => {
+                  diminirQuantidade(produto);
+                  ga.event({
+                    action: "remove_from_cart",
+                    params: {
+                      currency: "BRL",
+                      value: produto.preco,
+                      items: [
+                        {
+                          item_id: produto.id,
+                          item_name: produto.nome,
+                          price: produto.preco,
+                          quantity: produto.quantidade,
+                        },
+                      ],
+                    },
+                  });
+                }}
               >
                 <RemoveIcon />
               </IconButton>
@@ -183,8 +234,8 @@ export const Header = () => {
         }}
         sx={{ minWidth: "400px" }}
       >
-        {usuario &&
-          (usuario.role === "admin" ? (
+        {user &&
+          (user.perfil === "administrator" ? (
             <>
               <Typography
                 sx={{
@@ -231,8 +282,16 @@ export const Header = () => {
                 </Button>
                 <Button
                   variant="contained"
+                  color="primary"
+                  onClick={() => setOpenModalMeusProdutos(true)}
+                  startIcon={<StoreMallDirectoryIcon />}
+                >
+                  Meus produtos
+                </Button>
+                <Button
+                  variant="contained"
                   color="error"
-                  onClick={() => setUsuario(null)}
+                  onClick={() => handleLogout()}
                   startIcon={<LogoutIcon />}
                 >
                   Sair
@@ -248,12 +307,31 @@ export const Header = () => {
                   borderBottom: "1px solid var(--gray-300)",
                 }}
               >
-                Bem-vindo, {usuario.nome}!
+                Bem-vindo, {user.email}!
               </Typography>
+              <Stack spacing={2} sx={{ p: 2 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setOpenModalMeusProdutos(true)}
+                  startIcon={<StoreMallDirectoryIcon />}
+                >
+                  Meus produtos
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleLogout}
+                  startIcon={<LogoutIcon />}
+                >
+                  Sair
+                </Button>
+              </Stack>
             </>
           ))}
 
-        {!usuario && (
+        {!user && (
           <>
             <Typography
               sx={{
@@ -271,6 +349,8 @@ export const Header = () => {
                 label="Email"
                 variant="outlined"
                 sx={{ m: 2 }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <TextField
@@ -278,23 +358,16 @@ export const Header = () => {
                 label="Senha"
                 variant="outlined"
                 sx={{ m: 2 }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
               />
             </Stack>
             <Button
               variant="contained"
               color="primary"
               fullWidth
-              onClick={async () => {
-                setLoading(true);
-                setTimeout(() => {
-                  setLoading(false);
-                  setUsuario({
-                    nome: "João",
-                    email: "joao@email.com",
-                    role: "admin",
-                  });
-                }, 2000);
-              }}
+              onClick={() => handleLogin(email, password)}
             >
               {!loading ? (
                 "Entrar"
@@ -319,6 +392,11 @@ export const Header = () => {
       <ModalEditInfos
         open={openModalEditInfos}
         handleClose={() => setOpenModalEditInfos(false)}
+      />
+
+      <ModalMeusProdutos
+        open={openModalMeusProdutos}
+        handleClose={() => setOpenModalMeusProdutos(false)}
       />
     </>
   );

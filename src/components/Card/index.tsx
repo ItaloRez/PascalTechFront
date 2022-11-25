@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import styles from "./styles.module.scss";
+import * as ga from "src/lib/ga";
 
 export const Card = ({ id, name, price, image, description }) => {
   const router = useRouter();
@@ -9,6 +10,14 @@ export const Card = ({ id, name, price, image, description }) => {
       className={styles.container}
       onClick={() => {
         router.push(`/produto/${id}`);
+        ga.event({
+          action: "click",
+          params: {
+            event_category: "product",
+            event_label: name,
+            value: price,
+          },
+        });
       }}
     >
       <Image src={image} height={180} width={264} alt="Foto do produto" />

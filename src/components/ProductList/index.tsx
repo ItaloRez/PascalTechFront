@@ -15,11 +15,11 @@ export const ProductList = ({ category, products }: ProductListProps) => {
         <div className={styles.cards}>
           {products.map((product) => (
             <Card
-              key={product._id}
-              id={product._id}
+              key={product.id}
+              id={product.id}
               name={product.nome}
               price={product.preco}
-              image={product.imagens[0]}
+              image={product.imagens ? product.imagens[0] : ""}
               description={product.descricao}
             />
           ))}

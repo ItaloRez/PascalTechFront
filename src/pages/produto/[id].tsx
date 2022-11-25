@@ -5,30 +5,76 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import styles from "./styles.module.scss";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getProduto } from "../../services/produtos";
 import Link from "next/link";
 import { useCarrinhoContext } from "../../contexts/carrinho";
 import { toast } from "react-toastify";
 import { Autocomplete, Button, Select, TextField } from "@mui/material";
+import { useProdutos } from "src/contexts/produtosContext";
+import Stack from "@mui/material/Stack";
+import * as ga from "../../lib/ga";
 
 const Product = () => {
   const router = useRouter();
+  const { id } = router.query as { id: string };
 
   const { adicionarProduto } = useCarrinhoContext();
 
   const [produto, setProduto] = useState(null);
 
-  useEffect(() => {
-    getDataProduto();
-  }, []);
+  const { getProduto, addAvaliacao } = useProdutos();
 
-  const getDataProduto = async () => {
-    try {
-      const response = await getProduto(router.query.id);
-      setProduto(response.data);
-    } catch (error) {
-      console.log(error);
+  const [comentario, setComentario] = useState("");
+  const [estrelas, setEstrelas] = useState(5);
+
+  const initProduto = async () => {
+    const produto = await getProduto(id);
+    setProduto(produto);
+
+    ga.event({
+      action: "view_item",
+      params: {
+        currency: "BRL",
+        value: produto.preco,
+        items: [
+          {
+            item_id: produto.id,
+            item_name: produto.nome,
+            price: produto.preco,
+          },
+        ],
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (id) {
+      initProduto();
     }
+  }, [id]);
+
+  // const getDataProduto = async () => {
+  //   try {
+  //     const response = await getProduto(router.query.id);
+  //     setProduto(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const handleAdicionarAvaliacao = () => {
+    let avaliacoes = produto.avaliacoes || [];
+
+    avaliacoes.push({
+      comentario,
+      estrelas,
+    });
+
+    addAvaliacao(id, avaliacoes).then(() => {
+      setComentario("");
+      setEstrelas(5);
+      initProduto();
+      toast.success("Avaliação adicionada com sucesso!");
+    });
   };
 
   return (
@@ -82,8 +128,26 @@ const Product = () => {
               <button
                 onClick={() => {
                   if (produto) {
+                    console.log(produto);
                     adicionarProduto(produto);
-                    toast.success("Produto adicionado ao carrinho!");
+                    toast.success("Produto adicionado ao carrinho!", {
+                      position: "top-center",
+                    });
+                    ga.event({
+                      action: "add_to_cart",
+                      params: {
+                        currency: "BRL",
+                        value: produto.preco,
+                        items: [
+                          {
+                            item_id: produto.id,
+                            item_name: produto.nome,
+                            price: produto.preco,
+                            quantity: 1,
+                          },
+                        ],
+                      },
+                    });
                   } else {
                     toast.error("Erro ao adicionar produto ao carrinho!");
                   }
@@ -104,41 +168,38 @@ const Product = () => {
                 renderInput={(params) => (
                   <TextField {...params} label="Estrelas" />
                 )}
+                value={String(estrelas)}
+                onChange={(event, value) => {
+                  setEstrelas(Number(value));
+                }}
               />
               <TextField
                 id="outlined-multiline-static"
                 label="Deixe sua avaliação"
                 multiline
                 rows={4}
+                value={comentario}
+                onChange={(event) => {
+                  setComentario(event.target.value);
+                }}
               />
-              <Button variant="contained">Enviar</Button>
+              <Button variant="contained" onClick={handleAdicionarAvaliacao}>
+                Enviar
+              </Button>
             </div>
             <h2>Avaliações sobre o produto</h2>
             <div className={styles.comments}>
-              {produto?.avaliacoes.map((avaliacao: any) => (
+              {produto?.avaliacoes?.map((avaliacao: any) => (
                 <div className={styles.comment}>
-                  <div className={styles.startBox}>
-                    <AiFillStar />
-                    <AiFillStar />
-                    <AiFillStar />
-                    <AiFillStar />
-                    <AiOutlineStar />
-                    <span>4 estrelas</span>
-                  </div>
+                  <Stack direction="row" gap={1} alignItems="center">
+                    {Array.from({ length: avaliacao.estrelas }, (_, index) => (
+                      <AiFillStar key={index} />
+                    ))}
+                    <span>{avaliacao.estrelas} estrelas</span>
+                  </Stack>
                   <p>{avaliacao.comentario}</p>
                 </div>
               ))}
-              {/* <div className={styles.comment}>
-                <div className={styles.headerBox}>
-                  <span>Bruno</span>
-                  <AiFillStar />
-                  <span>(5 Estrelas)</span>
-                </div>
-                <span>
-                  Software execelente, utilizo todos os dias algum deles para o
-                  trabalho!
-                </span>
-              </div> */}
             </div>
           </div>
         </div>

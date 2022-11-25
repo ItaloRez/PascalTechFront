@@ -6,22 +6,32 @@ import {
 } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { getInformacoes } from "../../services/informacoes";
+import { useShopInfos } from "src/contexts/shopInfosContext";
 
 export const Footer = () => {
-  const [informacoes, setInformacoes] = useState(null);
+  const { shopInfos } = useShopInfos();
+
+  const [informacoes, setInformacoes] = useState({
+    slogan: "Site bom de comprar",
+    descricao: "Venha comprar aq!",
+    callToAction: "Compre agora",
+    email: "email@loja.com",
+    telefone: "(35) 1901-0909",
+    endereco: "rua josé da silva",
+    numero: "7",
+    bairro: "centro",
+    cidade: "Borda da Mata",
+    estado: "MG",
+    facebook: "https://www.facebook.com/",
+    instagram: "https://www.instagram.com/",
+    linkedin: "https://www.linkedin.com/",
+  });
 
   useEffect(() => {
-    getInformacoesData();
-  }, []);
-
-  const getInformacoesData = async () => {
-    try {
-      const response = await getInformacoes();
-      if (response) setInformacoes(response[0]);
-    } catch (error) {
-      console.log(error);
+    if (shopInfos) {
+      setInformacoes(shopInfos);
     }
-  };
+  }, [shopInfos]);
 
   return (
     <footer className={styles.footerContainer}>
@@ -50,10 +60,9 @@ export const Footer = () => {
             </p>
 
             <p>
-              <strong>Endereço:</strong> Endereço:{" "}
-              {informacoes?.endereco.logradouro}, {informacoes?.endereco.numero}{" "}
-              - {informacoes?.endereco.bairro} - {informacoes?.endereco.cidade}{" "}
-              - {informacoes?.endereco.estado}
+              <strong>Endereço:</strong> {informacoes?.endereco},{" "}
+              {informacoes?.numero} - {informacoes?.bairro} -{" "}
+              {informacoes?.cidade} - {informacoes?.estado}
             </p>
           </div>
 
@@ -62,7 +71,7 @@ export const Footer = () => {
             <ul>
               <li>
                 <a
-                  href={informacoes?.redesSociais.facebook}
+                  href={informacoes?.facebook}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -71,7 +80,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href={informacoes?.redesSociais.instagram}
+                  href={informacoes?.instagram}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -80,7 +89,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href={informacoes?.redesSociais.twitter}
+                  href={informacoes?.linkedin}
                   target="_blank"
                   rel="noreferrer"
                 >
